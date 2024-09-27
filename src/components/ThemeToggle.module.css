@@ -1,0 +1,48 @@
+.themeToggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    width: 60px;
+    margin-left: auto;
+}
+
+.themeToggleCheckbox {
+    display: none; 
+}
+
+.themeToggleLabel {
+    position: relative;
+    width: 60px; 
+    height: 34px; 
+    background-color: #ccc;
+    border-radius: 34px; 
+    transition: background-color 0.2s ease; 
+    cursor: pointer; 
+}
+
+.themeToggleInner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 34px; 
+    transition: background-color 0.2s ease;
+}
+
+.themeToggleSwitch {
+    position: absolute;
+    top: 2px; 
+    left: 2px;
+    width: 30px;
+    height: 30px; 
+    background-color: white; 
+    border-radius: 50%; 
+    transition: transform 0.2s ease; 
+}
+
+.themeToggleCheckbox:checked + .themeToggleLabel {
+    background-color: rgb(135, 246, 250); 
+}
+
+.themeToggleCheckbox:checked + .themeToggleLabel .themeToggleSwitch {
+    transform: translateX(26px); 
+}
