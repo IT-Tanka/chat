@@ -1,5 +1,6 @@
 import { db } from '../firebase';
-import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, query, where, getDoc, updateDoc, doc } from 'firebase/firestore';
+
 
 // export const createNewThread = async (userId) => {
 //     return await addDoc(collection(db, 'threads'), {
@@ -16,28 +17,37 @@ export const getUserThreads = async (userId) => {
 };
 
 export const getThreadMessages = async (threadId) => {
-    // const q = query(collection(db, 'messages'), where('threadId', '==', threadId));
-    // const querySnapshot = await getDocs(q);
-    // return querySnapshot.docs.map((doc) => doc.data());
-    const querySnapshot = await getDocs(collection(db, "threads"));
-    const threads = querySnapshot.docs.map(doc => {
-        const data = doc.data();
-        return {
-            id: doc.id,
-            title: data.title,
-            content: data.content,
-            createdAt: data.createdAt?.toDate() 
-        };
-    });
-    return threads;
+    // Получаем документ с id threadId из коллекции threads
+    const threadDoc = await getDoc(doc(db, 'threads', threadId));
+
+    if (threadDoc.exists()) {
+        const threadData = threadDoc.data();
+        console.log('messages', threadData.messages); // Предполагается, что сообщения хранятся в массиве messages
+        return threadData.messages || []; // Возвращаем массив сообщений, если он существует
+    } else {
+        console.error('Thread not found');
+        return [];
+    }
 };
+
 export const createNewThread = async (userId) => {
-    console.log('userId',userId);
+    console.log('userId', userId);
     const docRef = await addDoc(collection(db, 'threads'), {
         userId,
         createdAt: new Date(),
         messages: []
     });
     console.log('docRef', docRef);
-    return docRef; 
+    return docRef;
+};
+
+export const updateThreadMessages = async (threadId, newMessages) => {
+    try {
+        const threadRef = doc(db, 'threads', threadId);
+        await updateDoc(threadRef, {
+            messages: newMessages // Обновляем массив сообщений в базе данных
+        });
+    } catch (error) {
+        console.error('Error updating messages:', error);
+    }
 };

@@ -1,33 +1,83 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
 
 const RegisterPage = () => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const { register } = useAuth();
+    const [error, setError] = useState('');
+    const { register, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
+
+    const validateEmail = (email) => {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    };
+
+    const isPasswordStrong = (password) => {
+        return password.length >= 6 && /[A-Za-z]/.test(password) && /[0-9]/.test(password);
+    };
+    
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
-            console.error("Пароли не совпадают");
+    
+        // Check if any fields are empty
+        if (!username || !email || !password || !confirmPassword) {
+            setError("Please fill in all fields."); 
             return;
         }
-
+    
+        // Validate email format
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address."); 
+        }
+    
+        // Check password strength
+        if (!isPasswordStrong(password)) {
+            setError("Password must be at least 6 characters long and contain  letters and   numbers."); 
+            return;
+        }
+    
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            setError("Passwords do not match."); 
+            return;
+        }
+    
         try {
+            // Attempt to register the user with provided email and password
             await register(email, password);
-            navigate('/threads');
+            navigate('/threads'); 
         } catch (error) {
-            console.error("Ошибка регистрации", error);
+            setError("Registration error. An account with this email address may already exist."); 
+            console.error("Registration error", error); 
         }
     };
-
+    
+    const handleGoogleRegister = async () => {
+        try {
+            // Attempt to register the user via Google authentication
+            await loginWithGoogle();
+            navigate('/threads'); 
+        } catch (error) {
+            setError("Error registering with Google."); 
+            console.error("Error registering with Google", error); 
+        }
+    };
+    
     return (
         <div>
             <form onSubmit={handleRegister}>
+                <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Username"
+                    required
+                />
                 <input
                     type="email"
                     value={email}
@@ -49,7 +99,9 @@ const RegisterPage = () => {
                     placeholder="Confirm Password"
                     required
                 />
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <button type="submit">Register</button>
+                <button type="button" onClick={handleGoogleRegister}>Register with Google</button>
                 <Link to="/login">Login</Link>
             </form>
         </div>
@@ -57,4 +109,3 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
-

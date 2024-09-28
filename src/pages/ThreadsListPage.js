@@ -13,12 +13,10 @@ function ThreadsListPage() {
     useEffect(() => {
         const fetchThreads = async () => {
             try {
-                console.log('fetch threads');
                 const response = await getUserThreads(user.uid);
-                console.log('response', response);
                 setThreads(response);
             } catch (error) {
-                setError("Ошибка загрузки потоков");
+                setError("Error loading streams");
             } finally {
                 setLoading(false);
             }
@@ -33,7 +31,7 @@ function ThreadsListPage() {
             const newThread = await createNewThread(user.uid);
             navigate(`/threads/${newThread.id}`);
         } catch (error) {
-            console.error('Ошибка при создании нового потока:', error);
+            console.error('Error creating new thread:', error);
         }
     };
 
@@ -48,7 +46,8 @@ function ThreadsListPage() {
                     threads.map((thread) => (
                         <li key={thread.id}>
                             <Link to={`/threads/${thread.id}`}>
-                                {thread.messages[0]} - {thread['createdAt'] || thread[' createdAt'] ?
+                                {thread.messages.length > 0 ? thread.messages[0].text : "No messages"} - 
+                                {thread['createdAt'] || thread[' createdAt'] ? 
                                     (thread['createdAt'] || thread[' createdAt']).toDate().toLocaleString() :
                                     "No date"}
                             </Link>

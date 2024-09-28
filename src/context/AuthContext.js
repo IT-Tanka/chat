@@ -23,16 +23,30 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = (email, password) => {
-        return createUserWithEmailAndPassword(auth, email, password);
+    const register = async (email, password) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            return userCredential.user;
+        } catch (error) {
+            throw error; 
+        }
     };
 
-    const loginWithGoogle = () => {
-        return signInWithPopup(auth, provider);
+    const loginWithGoogle = async () => {
+        try {
+            const userCredential = await signInWithPopup(auth, provider);
+            return userCredential.user; // Возвращаем пользователя
+        } catch (error) {
+            throw error; 
+        }
     };
 
-    const logout = () => {
-        return signOut(auth);
+    const logout = async () => {
+        try {
+            await signOut(auth);
+        } catch (error) {
+            throw error; 
+        }
     };
 
     return (
