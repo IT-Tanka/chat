@@ -4,7 +4,7 @@ import RegisterPage from './pages/RegisterPage';
 import ThreadsListPage from './pages/ThreadsListPage';
 import ChatPage from './pages/ChatPage';
 import Header from './components/Header';
-import { AuthProvider } from './context/AuthContext'; 
+import { AuthProvider } from './context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -14,20 +14,23 @@ const App = () => {
       <AuthProvider>
         <Router>
           <Header />
-          <div className="container main">
-            <Routes>
-              <Route path="/" element={<Navigate to="/threads" />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route 
-                path="/threads" 
-                element={<PrivateRoute><ThreadsListPage /></PrivateRoute>} 
-              />
-              <Route 
-                path="/threads/:threadId" 
-                element={<PrivateRoute><ChatPage /></PrivateRoute>} 
-              />
-            </Routes>
+          <div className="main">
+            <div className="container">
+              <Routes>
+                <Route path="/" element={<Navigate to="/threads" />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route
+                  path="/threads"
+                  element={<PrivateRoute><ThreadsListPage /></PrivateRoute>}
+                />
+                <Route
+                  path="/threads/:threadId"
+                  element={<PrivateRoute><ChatPage /></PrivateRoute>}
+                />
+              </Routes>
+            </div>
+
           </div>
         </Router>
       </AuthProvider>

@@ -17,26 +17,27 @@ a {
   text-decoration: none;
   color: inherit; 
 }
+h2{
+  text-align: center;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
 
-/* styles.css */
-
-/* Определение переменных для светлой темы */
 :root {
   --background-color: #ffffff;
   --text-color: #000000;
-  --primary-color: #3498db;
-  --secondary-color: #2ecc71;
+  --primary-color:  rgb(135, 246, 250);;
+  --secondary-color:  #f9f9f9;;
 }
 
-/* Определение переменных для темной темы */
 [data-theme='dark'] {
   --background-color: #121212;
   --text-color: #ffffff;
   --primary-color: #2980b9;
-  --secondary-color: #27ae60;
+  --secondary-color:  #dad7d7;;
 }
 
-/* Общие стили */
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);

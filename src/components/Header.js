@@ -18,7 +18,7 @@ const Header = () => {
             <div className="container">
                 <div className={styles.header__wrapper}>
                     <div className={styles.logo}>
-                        <img src="../logo192.png" width="50" alt="Logo" className="logo-image" />
+                        <img src="../logo.svg" width="50" alt="Logo" className="logo-image" />
                         {user && (
                             <Link to="/threads">
                                 <span>Threads</span>
@@ -27,9 +27,9 @@ const Header = () => {
                     </div>
                     <div className={styles.btns}>
                         {user ? (  
-                            <button onClick={handleLogout}>Logout</button>  
+                            <button onClick={handleLogout}>LogOut</button>  
                         ) : (
-                            <Link to="/login" >Login</Link>  
+                            <Link to="/login" >LogIn</Link>  
                         )}
                         <ThemeToggle />
                     </div>

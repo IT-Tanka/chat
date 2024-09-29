@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { sendMessageToAI } from '../services/openAI';
 import { getThreadMessages, updateThreadMessages } from '../services/firestore';
+import styles from './ChatPage.module.css';
 
 const ChatPage = () => {
     const { threadId } = useParams();
@@ -14,25 +15,22 @@ const ChatPage = () => {
         const fetchMessages = async () => {
             try {
                 const fetchedMessages = await getThreadMessages(threadId);
-                console.log('Fetched messages:', fetchedMessages); // Отладка
-    
-                const messagesWithTimestamp = fetchedMessages.map(msg => {
+                const messagesWithTimestamp = fetchedMessages.map((msg) => {
                     let validTimestamp;
-    
-                    // Проверка, содержит ли msg.timestamp seconds и nanoseconds
+
                     if (msg.timestamp && msg.timestamp.seconds !== undefined) {
-                        // Преобразование в миллисекунды
-                        validTimestamp = new Date(msg.timestamp.seconds * 1000 + Math.floor(msg.timestamp.nanoseconds / 1000000));
+                        validTimestamp = new Date(
+                            msg.timestamp.seconds * 1000 + Math.floor(msg.timestamp.nanoseconds / 1000000)
+                        );
                     } else {
-                        validTimestamp = null; // Или используйте new Date() для текущего времени
+                        validTimestamp = null;
                     }
-    
+
                     return {
                         ...msg,
                         timestamp: validTimestamp,
                     };
                 });
-    
                 setMessages(messagesWithTimestamp);
             } catch (error) {
                 console.error('Error fetching messages:', error);
@@ -40,7 +38,6 @@ const ChatPage = () => {
         };
         fetchMessages();
     }, [threadId]);
-    
 
     const handleSendMessage = async () => {
         if (inputMessage.trim()) {
@@ -62,62 +59,64 @@ const ChatPage = () => {
                 await updateThreadMessages(threadId, finalMessages);
             } catch (error) {
                 console.error('Error sending message:', error);
-                setError('Ошибка при отправке сообщения. Попробуйте еще раз.');
+                setError('Error sending message. Please try again.');
             } finally {
                 setLoading(false);
             }
         }
     };
-    
+
     const handleInputChange = (e) => {
         setInputMessage(e.target.value);
         e.target.style.height = 'auto';
         e.target.style.height = `${e.target.scrollHeight}px`;
     };
+
     return (
-        <div>
-            <h2>Chat with AI</h2>
-            <div style={{ maxHeight: '400px', overflowY: 'scroll', border: '1px solid #ccc', padding: '10px' }}>
+        <div className={styles.chatContainer}>
+            <div className={styles.chatBox}>
                 {loading && <p>Loading...</p>}
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p className={styles.errorMessage}>{error}</p>}
+                {messages.length > 0 ? (
+                    <h2 className={styles.chatTitle}>{messages[0].text}</h2>
+                ) : (
+                    <h2 className={styles.chatTitle}>Welcome to the Chat</h2>
+                )}
                 {messages.length === 0 ? (
                     <p>No messages yet</p>
                 ) : (
                     messages.map((msg, index) => (
-                        <div key={index} style={{ margin: '10px 0', textAlign: msg.sender === 'user' ? 'right' : 'left' }}>
-                            <strong>{msg.sender === 'user' ? 'User' : 'AI'}:</strong>
-                            <div>{msg.text}</div>
-                            <small style={{ fontStyle: 'italic', color: 'gray' }}>
+                        <div
+                            key={index}
+                            className={`${styles.message} ${msg.sender === 'user' ? styles.userMessage : styles.aiMessage
+                                }`}
+                        >
+                            <div className={styles.messageContent}>
+                                <strong>{msg.sender === 'user' ? 'User' : 'AI'}:</strong>
+                                <div>{msg.text}</div>
+                            </div>
+                            <small className={styles.timestamp}>
                                 {msg.timestamp ? msg.timestamp.toLocaleString() : 'No date available'}
                             </small>
                         </div>
                     ))
                 )}
             </div>
-            {/* <input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-            /> */}
-            <textarea
-                value={inputMessage}
-                onChange={handleInputChange}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                rows={1}
-                style={{
-                    width: '100%',
-                    resize: 'none',
-                    overflow: 'hidden',
-                    padding: '10px',
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    boxSizing: 'border-box',
-                }}
-            />
-            <button onClick={handleSendMessage}>Send</button>
+            <div className={styles.inputContainer}>
+                <textarea
+                    value={inputMessage}
+                    onChange={handleInputChange}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                    rows={1}
+                    className={styles.messageInput}
+                />
+                <button onClick={handleSendMessage}>
+                    Send
+                </button>
+            </div>
         </div>
     );
 };
 
 export default ChatPage;
+

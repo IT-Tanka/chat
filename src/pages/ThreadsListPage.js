@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getUserThreads, createNewThread } from '../services/firestore'; // Импортируйте createNewThread
+import { getUserThreads, createNewThread } from '../services/firestore';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
+import styles from './ThreadsListPage.module.css'; // Импортируем стили
 
 function ThreadsListPage() {
     const { user } = useAuth();
@@ -16,7 +17,7 @@ function ThreadsListPage() {
                 const response = await getUserThreads(user.uid);
                 setThreads(response);
             } catch (error) {
-                setError("Error loading streams");
+                setError("Error loading threads");
             } finally {
                 setLoading(false);
             }
@@ -27,7 +28,6 @@ function ThreadsListPage() {
 
     const handleNewConversation = async () => {
         try {
-            console.log('user.uid', user.uid);
             const newThread = await createNewThread(user.uid);
             navigate(`/threads/${newThread.id}`);
         } catch (error) {
@@ -40,24 +40,28 @@ function ThreadsListPage() {
 
     return (
         <div>
-            <h1>Your Conversations</h1>
-            <ul>
+            <h2>Your Conversations</h2>
+            <ul className={styles.threadsList}>
                 {threads.length > 0 ? (
                     threads.map((thread) => (
-                        <li key={thread.id}>
-                            <Link to={`/threads/${thread.id}`}>
-                                {thread.messages.length > 0 ? thread.messages[0].text : "No messages"} - 
+                        <li key={thread.id} className={styles.threadItem}>
+                            <Link to={`/threads/${thread.id}`} className={styles.threadLink}>
+                                {thread.messages.length > 0 ? thread.messages[0].text : "No messages"}
+                            </Link>
+                            <div className={styles.threadInfo}>
                                 {thread['createdAt'] || thread[' createdAt'] ? 
                                     (thread['createdAt'] || thread[' createdAt']).toDate().toLocaleString() :
                                     "No date"}
-                            </Link>
+                            </div>
                         </li>
                     ))
                 ) : (
                     <p>No conversations yet.</p>
                 )}
             </ul>
-            <button onClick={handleNewConversation}>Start new conversation</button>
+            <button onClick={handleNewConversation}>
+                Start new conversation
+            </button>
         </div>
     );
 }

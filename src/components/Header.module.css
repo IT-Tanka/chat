@@ -18,3 +18,16 @@ background-color:grey;
     gap:10px;
     margin-left: auto;
 }
+
+.btns button{
+    color:var(--text-color);
+    background-color: var(--background-color);
+    font-size: 14px;
+}
+.logo{
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    text-transform: uppercase;
+    color:aqua;
+}

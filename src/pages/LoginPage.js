@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
@@ -12,7 +13,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Check for saved email and password in localStorage
+
         const savedEmail = localStorage.getItem('userEmail');
         const savedPassword = localStorage.getItem('userPassword');
         if (savedEmail) {
@@ -31,7 +32,6 @@ const LoginPage = () => {
             return;
         }
 
-        // Validate email format
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
             setError("Enter a valid email.");
@@ -42,7 +42,7 @@ const LoginPage = () => {
             const userCredential = await login(email, password, rememberMe);
             if (rememberMe) {
                 localStorage.setItem('userEmail', email);
-                localStorage.setItem('userPassword', password); // Save password (not recommended for security reasons)
+                localStorage.setItem('userPassword', password); 
             } else {
                 localStorage.removeItem('userEmail');
                 localStorage.removeItem('userPassword');
@@ -81,18 +81,20 @@ const LoginPage = () => {
                     placeholder="Password"
                     required
                 />
+                
+                <div className={styles.btns}>
+                {error && <p className={styles.error}>{error}</p>}
                 <div>
                     <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={() => setRememberMe(!rememberMe)}
                     />
-                    <label>Remember me</label>
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit">Login</button>
-                <button type="button" onClick={handleGoogleLogin}>Login with Google</button>
-                <Link to="/register">Register</Link>
+                    <button type="submit">Login</button>
+                <button type="button" onClick={handleGoogleLogin}>Login with Google</button></div>
+                
+                <Link className={styles.register_link} to="/register">Register</Link>
             </form>
         </div>
     );
