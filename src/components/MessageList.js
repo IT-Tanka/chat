@@ -20,7 +20,7 @@ const MessageList = ({ messages, handleRetry }) => {
             )}
             <div className={styles.chatBox}>
                 {messages.length === 0 ? (
-                    <p>No messages yet</p>
+                    <p className={styles.no_messages} >No messages yet</p>
                 ) : (
                     messages.map((msg, index) => (
                         <div

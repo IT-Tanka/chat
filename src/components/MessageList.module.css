@@ -66,4 +66,6 @@
     border: none;
 }
 
-
+.no_messages{
+    background-color: var(--background-color);
+}
