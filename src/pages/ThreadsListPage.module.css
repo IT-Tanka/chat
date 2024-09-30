@@ -2,7 +2,7 @@
     list-style-type: none;
     padding: 0;
     margin-bottom: 30px;
-    max-height: calc(100vh - 110px - 30px - 60px - 60px);
+    max-height: calc(100vh - 110px - 30px - 60px - 70px);
     overflow: auto;
 
 }
@@ -47,7 +47,6 @@
 
 .threadInfo {
     font-size: 0.9rem;
-    color: #666;
     width: 140px;
     display: block;
     flex-shrink: 0;

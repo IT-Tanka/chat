@@ -2,10 +2,12 @@
 .chatBox {
     flex-grow: 1;
     overflow-y: auto;
-    max-height: calc(100vh - 110px - 30px - 90px - 60px);
+    max-height: calc(100vh - 110px - 30px - 90px - 70px);
     margin-bottom: 30px;
     display: flex;
     flex-direction: column;
+    background-color: var(--secondary-color);  
+    border-radius: 10px;
 }
 
 .message {

@@ -53,7 +53,7 @@ export const AuthProvider = ({ children, navigate }) => {
 
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>...</div>;
     }
 
     return (
