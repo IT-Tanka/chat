@@ -4,12 +4,14 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithP
 
 const AuthContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, navigate }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             setUser(user);
+            setLoading(false);
         });
         return () => unsubscribe();
     }, []);
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             return userCredential.user;
         } catch (error) {
-            throw error; 
+            throw error;
         }
     };
 
@@ -28,16 +30,16 @@ export const AuthProvider = ({ children }) => {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             return userCredential.user;
         } catch (error) {
-            throw error; 
+            throw error;
         }
     };
 
     const loginWithGoogle = async () => {
         try {
             const userCredential = await signInWithPopup(auth, provider);
-            return userCredential.user; // Возвращаем пользователя
+            return userCredential.user;
         } catch (error) {
-            throw error; 
+            throw error;
         }
     };
 
@@ -45,9 +47,14 @@ export const AuthProvider = ({ children }) => {
         try {
             await signOut(auth);
         } catch (error) {
-            throw error; 
+            throw error;
         }
     };
+
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <AuthContext.Provider value={{ user, login, register, loginWithGoogle, logout }}>

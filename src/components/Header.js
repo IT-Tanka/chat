@@ -5,12 +5,12 @@ import styles from './Header.module.css';
 import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
-
     const { user, logout } = useAuth();  
     const navigate = useNavigate();  
 
-    const handleLogout = () => {
-        logout(navigate); 
+    const handleLogout = async () => {
+        await logout(); 
+        navigate('/login'); 
     };
 
     return (
@@ -29,7 +29,7 @@ const Header = () => {
                         {user ? (  
                             <button onClick={handleLogout}>LogOut</button>  
                         ) : (
-                            <Link to="/login" >LogIn</Link>  
+                            <Link to="/login">LogIn</Link>  
                         )}
                         <ThemeToggle />
                     </div>

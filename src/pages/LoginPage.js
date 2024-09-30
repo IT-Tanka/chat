@@ -56,6 +56,13 @@ const LoginPage = () => {
 
     const handleGoogleLogin = async () => {
         try {
+            if (rememberMe) {
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userPassword', password); 
+            } else {
+                localStorage.removeItem('userEmail');
+                localStorage.removeItem('userPassword');
+            }
             await loginWithGoogle();
             navigate('/threads');
         } catch (error) {

@@ -15,10 +15,25 @@ export const sendMessageToAI = async (message) => {
 
     } catch (error) {
         if (error.status === 429) {
-            console.error('Слишком много запросов. Повторите попытку позже.');
+            console.error('Too many requests. Please try again later.');
         } else {
-            console.error('Ошибка при взаимодействии с OpenAI:', error.message || error);
+            console.error('Error interacting with OpenAI:', error.message || error);
         }
+        throw error;
+    }
+};
+export const generateAIImage = async (prompt) => {
+    try {
+        const response = await openai.images.generate({
+            prompt: prompt,  
+            n: 1,         
+            size: "1024x1024"  
+        });
+
+        return response.data[0].url;
+
+    } catch (error) {
+        console.error('Error generating image:', error.message || error);
         throw error;
     }
 };

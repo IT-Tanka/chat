@@ -2,6 +2,9 @@
     list-style-type: none;
     padding: 0;
     margin-bottom: 30px;
+    max-height: calc(100vh - 110px - 30px - 60px - 60px);
+    overflow: auto;
+
 }
 
 .threadItem {
@@ -15,16 +18,26 @@
     justify-content: space-between;
     align-items: center;
     background: var(--secondary-color);
+    position: relative;
 
+}
+
+.del_btn {
+    background-color: transparent;
+    position: absolute;
+    top:0;
+    right: 0;
+    height: 50px;
+    cursor:pointer;
 }
 
 .threadLink {
     text-decoration: none;
-    color:#0056b3;;
+    color: #0056b3;
     font-weight: bold;
     display: block;
     font-size: 1rem;
-    
+
 }
 
 .threadLink:hover {
@@ -38,15 +51,16 @@
     width: 140px;
     display: block;
     flex-shrink: 0;
+    margin-right: 30px;
 }
 
-button{
-    margin:0 auto;
+button {
+    margin: 0 auto;
 }
 
-@media(max-width:425px){
+@media(max-width:425px) {
     .threadInfo {
         width: 80px;
     }
-    
+
 }

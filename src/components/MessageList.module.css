@@ -1,0 +1,67 @@
+
+.chatBox {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 110px - 30px - 90px - 60px);
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+    padding: 10px 10px 20px 10px;
+    border-radius: 10px;
+    max-width: 90%;
+    word-wrap: break-word;
+    color: black;
+    position: relative;
+    width: fit-content;
+}
+
+.userMessage {
+    background-color: #d1e7fd;
+    align-self: flex-start;
+    border: 1px solid #80bfff;
+    margin-right: auto;
+    margin-left: 10px;
+}
+
+.aiMessage {
+    background-color: #e0e0e0;
+    align-self: flex-end;
+    border: 1px solid #b0b0b0;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.messageContent {
+    margin-bottom: 5px;
+}
+
+.timestamp {
+    font-style: italic;
+    color: gray;
+    font-size: 0.8em;
+}
+
+
+
+.retry_btn {
+    border: none;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.no_answer {
+    background-color: rgba(255, 0, 0, 0.058);
+    border: none;
+}
+
+

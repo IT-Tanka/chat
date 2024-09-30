@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getUserThreads, createNewThread } from '../services/firestore';
+import { getUserThreads, createNewThread, deleteThread } from '../services/firestore';  
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import styles from './ThreadsListPage.module.css'; // Импортируем стили
+import styles from './ThreadsListPage.module.css';  
 
 function ThreadsListPage() {
     const { user } = useAuth();
@@ -35,6 +35,17 @@ function ThreadsListPage() {
         }
     };
 
+    const handleDeleteThread = async (threadId) => {
+        if (window.confirm("Are you sure you want to delete this conversation?")) {
+            try {
+                await deleteThread(threadId);
+                setThreads(threads.filter(thread => thread.id !== threadId));  
+            } catch (error) {
+                console.error('Error deleting thread:', error);
+            }
+        }
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
@@ -49,10 +60,16 @@ function ThreadsListPage() {
                                 {thread.messages.length > 0 ? thread.messages[0].text : "No messages"}
                             </Link>
                             <div className={styles.threadInfo}>
-                                {thread['createdAt'] || thread[' createdAt'] ? 
+                                {thread['createdAt'] || thread[' createdAt'] ?
                                     (thread['createdAt'] || thread[' createdAt']).toDate().toLocaleString() :
                                     "No date"}
                             </div>
+                            <button
+                                className={styles.del_btn}
+                                onClick={() => handleDeleteThread(thread.id)}  
+                            >
+                                &times;
+                            </button>
                         </li>
                     ))
                 ) : (
@@ -67,3 +84,4 @@ function ThreadsListPage() {
 }
 
 export default ThreadsListPage;
+

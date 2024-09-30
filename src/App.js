@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -10,9 +11,9 @@ import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   return (
-    <GoogleOAuthProvider clientId="979750606063-r2ja192qrh4m9ftic4023vk55ulscv0j.apps.googleusercontent.com">
-      <AuthProvider>
-        <Router>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <Router>
+        <AuthProvider> 
           <Header />
           <div className="main">
             <div className="container">
@@ -30,12 +31,14 @@ const App = () => {
                 />
               </Routes>
             </div>
-
           </div>
-        </Router>
-      </AuthProvider>
+        </AuthProvider>
+      </Router>
     </GoogleOAuthProvider>
   );
 };
 
 export default App;
+
+
+
