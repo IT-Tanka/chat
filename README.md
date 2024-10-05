@@ -1,4 +1,4 @@
-# AI Assistant Web Interface
+# CHAT - AI Assistant Web Interface
 
 ## Overview
 
