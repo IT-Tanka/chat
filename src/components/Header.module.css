@@ -1,5 +1,5 @@
 .header {
-    background-color: grey;
+    background-color: #8080808f;
     position: fixed;
     top: 0;
     left: 0;
@@ -36,5 +36,5 @@
     gap: 2px;
     align-items: center;
     text-transform: uppercase;
-    color: aqua;
+    color: var(--primary-color);
 }

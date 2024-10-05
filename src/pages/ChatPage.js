@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { sendMessageToAI } from '../services/openAI';
+import { handleUserMessage } from '../services/openAI';
 import { getThreadMessages, updateThreadMessages } from '../services/firestore';
 import MessageList from '../components/MessageList';
 import MessageInput from '../components/MessageInput';
-import DotLoader from '../components/DotLoader';
 import styles from './ChatPage.module.css';
 
 const ChatPage = () => {
@@ -52,7 +51,6 @@ const ChatPage = () => {
         fetchMessages();
     }, [threadId]);
 
-
     const handleSendMessage = async () => {
         if (inputMessage.trim()) {
             const newMessage = {
@@ -72,7 +70,7 @@ const ChatPage = () => {
 
             // Add a temporary message with animated dots (preloader)
             const tempAiMessage = {
-                text: <DotLoader />,
+                text: '...', 
                 sender: 'ai',
                 timestamp: new Date(),
                 hasError: false,
@@ -81,11 +79,12 @@ const ChatPage = () => {
             setMessages(messagesWithTempLoader);
 
             try {
-                const aiResponse = await sendMessageToAI(inputMessage);
+                const aiResponse = await handleUserMessage(inputMessage);
 
                 // Remove the temporary message and add the real response from the AI
                 const aiMessage = {
-                    text: aiResponse,
+                    text: aiResponse.text,
+                    imageUrl: aiResponse.imageUrl,
                     sender: 'ai',
                     timestamp: new Date(),
                     hasError: false,
@@ -105,7 +104,6 @@ const ChatPage = () => {
         }
     };
 
-
     const handleRetry = async (messageIndex) => {
         const messageToRetry = messages[messageIndex];
         if (messageToRetry) {
@@ -113,8 +111,14 @@ const ChatPage = () => {
             setMessages([...messages]);
             setLoading(true);
             try {
-                const aiResponse = await sendMessageToAI(messageToRetry.text);
-                const aiMessage = { text: aiResponse, sender: 'ai', timestamp: new Date(), hasError: false };
+                const aiResponse = await handleUserMessage(messageToRetry.text);
+                const aiMessage = {
+                    text: aiResponse.text,
+                    imageUrl: aiResponse.imageUrl,
+                    sender: 'ai',
+                    timestamp: new Date(),
+                    hasError: false,
+                };
                 const updatedMessages = [...messages, aiMessage];
                 setMessages(updatedMessages);
 
@@ -130,15 +134,19 @@ const ChatPage = () => {
     };
 
     return (
-        <div className={styles.chatContainer}>
+        <div className={styles.chatPage}>
             <MessageList messages={messages} handleRetry={handleRetry} />
             <MessageInput
-                inputMessage={inputMessage}
-                setInputMessage={setInputMessage}
-                handleSendMessage={handleSendMessage}
+                inputMessage={inputMessage}  
+                setInputMessage={setInputMessage}  
+                handleSendMessage={handleSendMessage}  
+                loading={loading}
             />
         </div>
     );
 };
 
 export default ChatPage;
+
+
+

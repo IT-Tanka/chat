@@ -13,7 +13,12 @@ const MessageInput = ({ inputMessage, setInputMessage, handleSendMessage }) => {
             <textarea
                 value={inputMessage}
                 onChange={handleInputChange}
-                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) { // Added condition to prevent sending on Shift+Enter
+                        e.preventDefault(); // Prevents new line
+                        handleSendMessage();
+                    }
+                }}
                 rows={1}
                 className={styles.messageInput}
             />

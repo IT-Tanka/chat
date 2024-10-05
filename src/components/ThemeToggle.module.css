@@ -40,7 +40,7 @@
 }
 
 .themeToggleCheckbox:checked + .themeToggleLabel {
-    background-color: rgb(135, 246, 250); 
+    background-color: rgba(0, 0, 0, 0.47);
 }
 
 .themeToggleCheckbox:checked + .themeToggleLabel .themeToggleSwitch {

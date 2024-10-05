@@ -9,13 +9,12 @@ const firebaseConfig = {
     storageBucket: "chat-ch2024.appspot.com",
     messagingSenderId: "332259979091",
     appId: "1:332259979091:web:3f9e75bcd70396bd03bba6"
-  };
-  
+};
 
-// Инициализация Firebase
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Экспорт Auth и Firestore
+// Export Auth and Firestore
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 export const db = getFirestore(app);
